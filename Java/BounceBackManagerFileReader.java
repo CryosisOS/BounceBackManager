@@ -1,17 +1,23 @@
 /**
  * Author: Nathan van der Velde
  * Date Created: 2018-02-08
- * Date Last Modified: 2018-02-08
+ * Date Last Modified: 2018-02-12
  */
 
 //IMPORTS
-import java.nio.File;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.Path;
 
 public class BounceBackManagerFileReader
 {
     //CLASS FIELDS
     private String filename;
+    private Path filePath;
+    private File thisFile
     private List<EmailBody> emailBodies = new ArrayList<EmailBody>();
 
     // DEFAULT CONSTRUCTOR
@@ -26,10 +32,67 @@ public class BounceBackManagerFileReader
         if(validateFileName(inFilename))
         {
             filename = inFilename;
+            setPath();
         }//ENDIF
     }//END setFileName
 
-    public 
+    private void setPath()
+    {
+        thisPath = Paths.get(inFilename);
+        setFile();
+    }//END setPath
+
+    private void setFile()
+    {
+        thisFile = new File(path.toString());
+    }//END setFile
+
+    public List<EmailBody> getEmailBodies()
+    {
+        List<EmailBody> copy = new ArrayList<EmailBody>();
+        copy.addAll(emailBodies);
+        return copy;
+    }//END getEmailBodies
+
+    public void read() throws IOException
+    {
+        String line;
+        FileInputStream fileStream = null;
+        FileReader rdr = null;
+        BufferedReader bufRdr = null;
+
+        try
+        {
+            fileStream = new FileInputStream(thisFile);
+            rdr = new FileReader(fileStream);
+            bufRdr = new BufferedReader(rdr);
+
+            line = bufRdr.readLine();
+            line = bufRdr.readLine();//Skip the first line.
+
+            while(line != null)
+            {
+                EmailBody newEmailBody = new EmailBody(line);
+                emailBodies.add(newEmailBody);
+            }//END WHILE
+            fileStream.close();
+        }//END TRY
+        catch(IOException ioex)
+        {
+            if(fileStream != null)
+            {
+                try
+                {
+                    fileStream.close();
+                }//END TYR
+                catch(IOException ioex2)
+                {
+                    //Can't do anything more
+                }//END CATCH
+            }//ENDIF
+            throw new IOException("There was an error in the file processing.");
+        }//END CATCH
+    }//END read
 
     private boolean validateFileName(String inFilename)
     {

@@ -1,7 +1,7 @@
 /**
  * Author: Nathan van der Velde
  * Date Created: 2018-02-08
- * Date Last Modified: 2018-02-08
+ * Date Last Modified: 2018-02-12
  */
 
 public abstract class EmailObject
@@ -11,8 +11,14 @@ public abstract class EmailObject
     
     public abstract String setText(String inText);
 
-    public abstract String getText();
+    public String getText()
+    {
+        return text;
+    }//END getText
 
-    public abstract String toString();
+    public String toString()
+    {
+        return text;
+    }//END toString
 
 }//END abstract class EmailObject
