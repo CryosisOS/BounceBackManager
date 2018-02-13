@@ -16,14 +16,15 @@ public class BounceBackManagerFileReader
 {
     //CLASS FIELDS
     private String filename;
-    private Path filePath;
+    private Path thisPath;
     private File thisFile
-    private List<EmailBody> emailBodies = new ArrayList<EmailBody>();
+    private List<EmailBody> emailBodies;
 
     // DEFAULT CONSTRUCTOR
     public BounceBackManagerFileReader()
     {
         filename = null;
+        emailBodies = new ArrayList<EmailBody>();
     }//END DEFAULT CONSTRUCTOR
 
     public void setFileName(String inFilename)
@@ -38,13 +39,13 @@ public class BounceBackManagerFileReader
 
     private void setPath()
     {
-        thisPath = Paths.get(inFilename);
+        thisPath = Paths.get(filename);
         setFile();
     }//END setPath
 
     private void setFile()
     {
-        thisFile = new File(path.toString());
+        thisFile = new File(thisPath.toString());
     }//END setFile
 
     public List<EmailBody> getEmailBodies()

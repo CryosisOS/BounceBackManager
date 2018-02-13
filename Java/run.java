@@ -7,7 +7,6 @@
 public class run
 {
     public static final String EMAIL_LIST_FILE_PATH = "G:\\Marketing\\Email Marketing List\\BounceBackManager\\";
-    //public static final String EMAIL_LIST_FILE_PATH = "";
 
     public static void main(String[] args) 
     {
