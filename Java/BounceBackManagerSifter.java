@@ -75,8 +75,8 @@ public class BounceBackManagerSifter
     private static boolean checkStandard(String inEmail)
     {
         boolean noMatch = false;
-        String standardOne = "glen.smith@lakesnetworking.com.au";
-        String standardTwo = "<glen.smith@lakesnetworking.com.au>";
+        String standardOne = "";//Removed standards for security sake since they are actualy emails.
+        String standardTwo = "";//Removed standards for security sake since they are actualy emails.
 
         if(!inEmail.equals(standardOne) && !inEmail.equals(standardTwo))
         {
