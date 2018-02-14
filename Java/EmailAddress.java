@@ -17,4 +17,14 @@ public class EmailAddress extends EmailObject
     {
     	super.setText(inText);
     }//END ALTERNATE CONSTRUCTOR
+
+    public boolean equals(EmailAddress inEmailAddress)
+    {
+        boolean isEqual = false;
+        if(this.getText().equals(inEmailAddress.getText()))
+        {
+            isEqual = true;
+        }//ENDIF
+        return isEqual;
+    }//END equals
 }//END class EmailAddress

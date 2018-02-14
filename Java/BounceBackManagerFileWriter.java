@@ -5,9 +5,14 @@
  */
 
 //IMPORTS
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 public class BounceBackManagerFileWriter
 {
@@ -16,7 +21,6 @@ public class BounceBackManagerFileWriter
 
     //CLASS FIELDS
     private String filename;
-    private Path filePath;
     private File thisFile;
     private List<EmailAddress> emailList;
 
@@ -30,56 +34,41 @@ public class BounceBackManagerFileWriter
     public void setFileName()
     {
         filename = run.EMAIL_LIST_FILE_PATH+ISOLATE_FILENAME;
-        setPath();
+        setFile();
     }//END setFileName
 
-    public void setEmailList(List<EmailAddress> inEmailList)
+    public void setEmailList(List<EmailAddress> inList)
     {
-        EmailList.getEmailList();
+        Set<EmailAddress> emailSet = new HashSet<EmailAddress>();
+        emailList.addAll(inList);
+        emailSet.addAll(emailList);
+        emailList.clear();
+        emailList.addAll(emailSet);
+        BounceBackManagerListCleaner.removeDuplicates(emailList);
     }//END setEmailList
-
-    private void setPath()
-    {
-        thisPath = Paths.get(filename);
-        setFile();
-    }//END setPath
 
     private void setFile()
     {
-        thisFile = new File(thisPath.toString());
+        thisFile = new File(filename);
     }//END setFile
 
     public void write() throws IOException
     {
         String line;
-        FileOutputStream fileStream =null;
-        PrintWriter pw = null;
+        FileWriter pw = null;
 
         try
         {
-            fileStream = new FileOutputStream(thisFile);
-            pw = new PrintWriter(fileStream);
-
+            pw = new FileWriter(thisFile);
             for(int ii=0;ii<emailList.size();ii++)
             {
                 line = emailList.get(ii).toString();
-                pw.println(line);
+                pw.write(line+"\n");
             }//END FOR
             pw.close();
         }//END TRY
         catch(IOException ioex)
         {
-            if(fileStream != null)
-            {
-                try
-                {
-                    fileStream.close();
-                }//END TRY
-                catch(IOException ioex2)
-                {
-                    //Can't do anything more
-                }//END CATCH
-            }//END IF
             throw ioex;
         }//END CATCH
     }//END write

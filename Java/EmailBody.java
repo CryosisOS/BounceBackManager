@@ -1,7 +1,7 @@
 /**
  * Author: Nathan van der Velde
  * Date Created: 2018-02-12
- * Date Last Modified: 2018-02-12
+ * Date Last Modified: 2018-02-13
  */
 
 public class EmailBody extends EmailObject
@@ -17,4 +17,14 @@ public class EmailBody extends EmailObject
     {
     	super.setText(inText);
     }//END ALTERNATE CONSTRUCTOR
+
+    public boolean equals(EmailBody inEmailBody)
+    {
+        boolean isEqual = false;
+        if(this.getText().equals(inEmailBody.getText()))
+        {
+            isEqual = true;
+        }//ENDIF
+        return isEqual;
+    }//END equals
 }//END class EmailAddress

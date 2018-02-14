@@ -1,23 +1,23 @@
 /**
  * Author: Nathan van der Velde
  * Date Created: 2018-02-08
- * Date Last Modified: 2018-02-12
+ * Date Last Modified: 2018-02-13
  */
 
 //IMPORTS
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.File;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
-import java.nio.Path;
+import java.util.List;
+import java.util.ArrayList;
 
 public class BounceBackManagerFileReader
 {
     //CLASS FIELDS
     private String filename;
-    private Path thisPath;
-    private File thisFile
+    private File thisFile;
     private List<EmailBody> emailBodies;
 
     // DEFAULT CONSTRUCTOR
@@ -30,22 +30,13 @@ public class BounceBackManagerFileReader
     public void setFileName(String inFilename)
     {
         inFilename = run.EMAIL_LIST_FILE_PATH+inFilename;
-        if(validateFileName(inFilename))
-        {
-            filename = inFilename;
-            setPath();
-        }//ENDIF
-    }//END setFileName
-
-    private void setPath()
-    {
-        thisPath = Paths.get(filename);
+        filename = inFilename;
         setFile();
-    }//END setPath
+    }//END setFileName
 
     private void setFile()
     {
-        thisFile = new File(thisPath.toString());
+        thisFile = new File(filename);
     }//END setFile
 
     public List<EmailBody> getEmailBodies()
@@ -59,22 +50,30 @@ public class BounceBackManagerFileReader
     {
         String line;
         FileInputStream fileStream = null;
-        FileReader rdr = null;
+        InputStreamReader rdr = null;
         BufferedReader bufRdr = null;
 
         try
         {
             fileStream = new FileInputStream(thisFile);
-            rdr = new FileReader(fileStream);
+            rdr = new InputStreamReader(fileStream);
             bufRdr = new BufferedReader(rdr);
 
+            System.out.println(thisFile.toString());
             line = bufRdr.readLine();
-            line = bufRdr.readLine();//Skip the first line.
-
+            line = bufRdr.readLine();//Skip the first Line
             while(line != null)
             {
-                EmailBody newEmailBody = new EmailBody(line);
-                emailBodies.add(newEmailBody);
+                if(lineAbove(line))
+                {
+                    line = bufRdr.readLine();
+                    EmailBody newEmailBody = new EmailBody(line);
+                    emailBodies.add(newEmailBody);    
+                }
+                else
+                {
+                    line = bufRdr.readLine();
+                }//ENDIF
             }//END WHILE
             fileStream.close();
         }//END TRY
@@ -95,15 +94,16 @@ public class BounceBackManagerFileReader
         }//END CATCH
     }//END read
 
-    private boolean validateFileName(String inFilename)
+    private boolean lineAbove(String inLine)
     {
-        boolean isValid = false;
-        Path pathToFile = Paths.get(inFilename);
-        File file = new File(pathToFile.toString());
-        if(file.exists() && !file.isDirectory())
+        boolean isLineAbove = false;
+
+        if(inLine.equals("The recipients that were affected are:") 
+            || inLine.equals("Delivery has failed to these recipients or groups:")
+            || inLine.equals("The recipients that were affected are:"))
         {
-            isValid = true;
+            isLineAbove = true;
         }//ENDIF
-        return isValid;
-    }//END validateFileName
+        return isLineAbove;
+    }//END lineAbove
 }//END class BounceBackManagerReadFile

@@ -38,19 +38,25 @@ public class Main
     {
         String inFilename;
         String outFilename;
-        String promptOne = "Please enter in the name of the CSV File that contains all the email bodies: ";
-        String promptTwo = "Please enter in the name of the CSV File that you would like the required contents into: ";
+        String prompt = "Please enter in the name of the CSV File that contains all the email bodies: ";
+        List<EmailAddress> emailList = new ArrayList<EmailAddress>();
         BounceBackManagerFileReader fileReader = new BounceBackManagerFileReader();
         BounceBackManagerFileWriter fileWriter = new BounceBackManagerFileWriter();
 
         try
         {
-            inFilename = UserInput.getString(promptOne);
+            inFilename = UserInput.getString(prompt);
+            out.print("Reading the file...\n");
             fileReader.setFileName(inFilename);
             fileReader.read();
-            siftFile(fileReader);
-            outFilename = UserInput.getString(promptTwo);
-            fileWriter.setFileName(outFilename);
+            out.print("File read...\n");
+            out.print("Proceeding to extract emails...\n");
+            emailList = siftFile(fileReader);
+            out.print("Emails extracted...\n");
+            out.print("Writing list...\n");
+            fileWriter.setFileName();
+            fileWriter.setEmailList(emailList);
+            fileWriter.write();
         }//END TRY
         catch(IOException ioex)
         {
@@ -60,11 +66,18 @@ public class Main
         }
     }//END menu
 
-    public static void siftFile(BounceBackManagerFileReader fileReader)
+    public static List<EmailAddress> siftFile(BounceBackManagerFileReader fileReader)
     {
-        for(int ii=0;ii<fileReader.getEmailBodies().size();ii++)
+        List<EmailBody> list = new ArrayList<EmailBody>();
+        List<EmailAddress> emailList = new ArrayList<EmailAddress>();
+        EmailAddress email = new EmailAddress();
+        list.addAll(fileReader.getEmailBodies());
+        for(int ii=0;ii<list.size();ii++)
         {
-            BounceBackManagerSifter.sift(fileReader.getEmailBodies.get(ii).toString());
+            String inString = list.get(ii).toString();
+            email = BounceBackManagerSifter.sift(inString);
+            emailList.add(email);
         }//END FOR
+        return emailList;
     }//END siftFile
 }//END class Main

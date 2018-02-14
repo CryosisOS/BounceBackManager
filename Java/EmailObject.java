@@ -9,7 +9,10 @@ public abstract class EmailObject
     //CLASS FIELDS
     private String text;
     
-    public abstract String setText(String inText);
+    public void setText(String inText)
+    {
+        text = inText;
+    }//END setText
 
     public String getText()
     {

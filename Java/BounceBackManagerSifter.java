@@ -1,42 +1,44 @@
 /**
  * Author: Nathan van der Velde
  * Date Created: 2018-02-12
- * Date Last Modified: 2018-02-12
+ * Date Last Modified: 2018-02-13
  */
 
 //IMPORTS
 import java.util.List;
 import java.util.ArrayList;
 
-public class BounceBackManagerSifter()
+public class BounceBackManagerSifter
 {
-    public static String sift(String inString)
+    public static EmailAddress sift(String inString)
     {
         int length = inString.length();
         int charIndex;
-        char currentChar
+        char currentChar;
         String siftedString;
-
-        for(int ii=0;ii<length;ii+=)
+        List<EmailAddress> emailList = new ArrayList<EmailAddress>();
+        EmailAddress email = new EmailAddress();
+        
+        for(int ii=0;ii<length;ii++)
         {
             currentChar = inString.charAt(ii);
             if(currentChar=='@')
             {
                 charIndex = ii;
-                inString = trimRight(charIndex, inString);
-                inString = trimLeft(charIndex, inString);
+                //inString = trimRight(charIndex, inString);
+                //inString = trimLeft(charIndex, inString);
             }//ENDIF
             if(checkStandard(inString))
             {
-                EmailAddress email = new EmailAddress(inString);
-                EmailList.add(email);
+                email = new EmailAddress(inString);
             }//ENDIF
         }//END FOR
+        return email;
     }//END sift
 
     private static String trimRight(int charIndex, String inString)
     {
-        int indexToCut;
+        int indexToCut = charIndex;
         do
         {
             if(inString.charAt(charIndex)==' ')
@@ -54,7 +56,7 @@ public class BounceBackManagerSifter()
 
     private static String trimLeft(int charIndex, String inString)
     {
-        int indexToCut;
+        int indexToCut = charIndex;
         do
         {
             if(inString.charAt(charIndex)==' ')
